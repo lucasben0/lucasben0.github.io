@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Lucas Ben" />
+
+
+<title>improved_wineclassification.knit</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Lucas Ben</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="home.html">Home</a>
+</li>
+<li>
+  <a href="projects.html">My Projects</a>
+</li>
+<li>
+  <a href="school.html">School</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:lben@dal.ca">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/lucasben0">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://x.com/_lben">
+    <span class="fa fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.linkedin.com/in/lucas-b-619178204/">
+    <span class="fa fa-linkedin fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<p><span style="font-size:28px"><b>Wine Classification Using Logistic
+Regression</b></span></p>
+<p>In this project, I built a classifier to distinguish red and white
+wines based on their chemical properties. The data set is from Cortez et
+al. (2009), “Modeling wine preferences by data mining from
+physicochemical properties”. A formatted version of the data was used
+for this project.</p>
+<div id="code-and-results" class="section level3">
+<h3>Code and Results</h3>
+<pre class="r"><code># Data preparation
+data = read.csv(&quot;wine_data.csv&quot;) # this dataset focuses on two variables: density (wine density in g/cm^3) and total.sulfur.dioxide (amount of sulfur dioxide in the wine, in mg/dm^3)</code></pre>
+<pre class="r"><code>library(ggplot2)
+
+ggplot(data, aes(total.sulfur.dioxide, density, col = type)) +
+  geom_point() +
+  scale_color_manual(values = c(&quot;darkred&quot;, &quot;wheat3&quot;)) + 
+  theme_bw()</code></pre>
+<p><img src="improved_wineclassification_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<span style="font-size:10px"><b>Figure 1.1: Scatter plot of total sulfur
+dioxide vs. density by type</b></span></p>
+<p>Based on the plot, total.sulfur.dioxide is the most helpful variable
+to classify the two wine types because there is less overlap between the
+two classes in that dimension. Density is less helpful because red and
+white wines don’t seem to be very different in terms of density.</p>
+<p>The output variable is ‘type’ which takes two values: “red” and
+“white”. I’m transforming this variable from a string to a boolean. red
+wines = 0, white wines = 1.</p>
+<pre class="r"><code>data$type &lt;- as.numeric(factor(data$type)) - 1
+table(data$type) </code></pre>
+<pre><code>## 
+##    0    1 
+## 1599 4898</code></pre>
+<p>Fitting a logistic regression model for ‘type’ using only
+total.sulfur.dioxide as an input variable.</p>
+<pre class="r"><code># For now the whole data set will be used as training data
+mod1 = glm(formula = type ~ total.sulfur.dioxide, data = data, family = binomial) # fitting model
+pred1 = round(predict(mod1, type = &quot;response&quot;)) # predictions
+conf1 = table(pred1, data$type) # confusion matrix
+train_error1 = 1 - sum(diag(conf1)) / nrow(data) # deriving the training error rate
+cat(&quot;The training error rate using only total.sulfur.dioxide as an input variable is&quot;, train_error1, &quot;\n&quot;)</code></pre>
+<pre><code>## The training error rate using only total.sulfur.dioxide as an input variable is 0.07464984</code></pre>
+<p>Fitting a logistic regression model for ‘type’ using only density as
+an input variable.</p>
+<pre class="r"><code>mod2 = glm(formula = type ~ density,data = data, family = binomial) # fitting model
+pred2 = round(predict(mod2, type = &quot;response&quot;)) # predictions
+conf2 = table(pred2, data$type) # confusion matrix
+train_error2 = 1 - sum(diag(conf2)) / nrow(data) # deriving the training error rate
+cat(&quot;The training error rate using only density as an input variable is&quot;, train_error2, &quot;\n&quot;)</code></pre>
+<pre><code>## The training error rate using only density as an input variable is 0.2647376</code></pre>
+<p>Fitting a logistic regression model for ‘type’ using both
+total.sulfur.dioxide and density as input variables.</p>
+<pre class="r"><code>mod3 = glm(formula = type ~ total.sulfur.dioxide + density, data = data, family = binomial) # fitting model
+pred3 = round(predict(mod3, type = &quot;response&quot;))  # predictions
+conf3 = table(pred3, data$type)  # confusion matrix
+train_error3 = 1 - sum(diag(conf3)) / nrow(data) # deriving the training error rate
+cat(&quot;The training error rate using both input variables is&quot;, train_error3, &quot;\n&quot;)</code></pre>
+<pre><code>## The training error rate using both input variables is 0.03971064</code></pre>
+<p>‘mod3’ achieved the best training error rate ~4% because it has more
+information to distinguish between the two wine types.</p>
+<p>‘mod1’ achieved a better training error rate ~7.5% because white and
+red wines have less overlap which implies different distributions of
+sulfur dioxide content.</p>
+<p>‘mod2’ achieved the highest training error rate ~26.5% because it
+only includes ‘density’ for which there is noticeable overlap between
+white and red wines (figure 1.1).</p>
+<p>Now using both input variables I’ll calculate the probability that a
+wine with total.sulfur.dioxide = 75, density = 0.997 is a red wine.</p>
+<pre class="r"><code>newdata = data.frame(total.sulfur.dioxide = 75, density = 0.997) # creating a new data set
+prob_white = predict(mod3, newdata = newdata, type = &quot;response&quot;)
+prob_red = 1 - prob_white 
+cat(&quot;The probability that a wine with a sulfur dioxide content of 75 mg/dm^3 and a density of 0.997 g/cm^3 is a red wine is ~&quot;, paste(round(prob_red * 100),&quot;%&quot;), &quot;\n&quot;)</code></pre>
+<pre><code>## The probability that a wine with a sulfur dioxide content of 75 mg/dm^3 and a density of 0.997 g/cm^3 is a red wine is ~ 81 %</code></pre>
+<p>Now I will estimate the test error rate.</p>
+<pre class="r"><code># Dividing the data set into training data and test data
+set.seed(2002) # for reproducibility
+n = nrow(data)
+n.train = round(n * 0.75) # including 75% of observations in the training data set
+ind.train = sample(1:n, size = n.train) # retrieving indices of training data
+ind.test = (1:n)[-ind.train] # retrieving indices of test data
+data.train = data[ind.train,]
+data.test = data[ind.test,] 
+
+# Fitting &#39;mod3&#39; to the training data
+mod4 = glm(formula = type ~ total.sulfur.dioxide + density, data = data.train, family = binomial)
+pred4 = round(predict(mod4, newdata = data.test, type = &quot;response&quot;)) 
+conf4 = table(pred4, data.test$type)
+test_error = 1 - sum(diag(conf4)) / nrow(data.test)
+cat(&quot;The test error rate using both input variables is&quot;, test_error, &quot;\n&quot;)</code></pre>
+<pre><code>## The test error rate using both input variables is 0.04310345</code></pre>
+<p>Now I’ll reiterate this procedure 20 times to get a more concrete
+answer.</p>
+<pre class="r"><code>niter = 20 # number of iterations
+test_errors = rep(NA, length = niter) # initializing an empty vector for test errors
+for(iter in 1:niter) {
+data.train = data[ind.train,]
+data.test = data[ind.test,]
+mod = glm(formula = type ~ total.sulfur.dioxide + density, data = data.train, family = binomial)
+pred = round(predict(mod, newdata = data.test, type = &quot;response&quot;)) 
+conf = table(pred, data.test$type)
+test_errors[iter] = 1 - sum(diag(conf)) / nrow(data.test)
+} 
+cat(&quot;The average of the 20 iterations for the test error rate is&quot;, mean(test_errors), &quot;\n&quot;)</code></pre>
+<pre><code>## The average of the 20 iterations for the test error rate is 0.04310345</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
