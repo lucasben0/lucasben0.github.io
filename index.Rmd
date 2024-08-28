@@ -1,0 +1,15 @@
+---
+title: "About Me"
+output:
+  html_document:
+    theme: united
+---
+
+# Hey!
+
+I am a data scientist interested in baseball. Currently, I am completing my final year of a BSc in statistics at [Dalhousie University](https://www.dal.ca/faculty/science/math-stats.html).
+
+At Dalhousie I have honed my data analysis skills (supervised/unsupervised learning methods, statistical inference, databases) and continued my journey of making sense of complex datasets. As well I have been a member of Dalhousie's baseball club serving as their treasurer and fundraising representative. 
+
+After graduation, I am looking to apply my data science skills in Big Data. Connect with me on [Linkedin](https://www.linkedin.com/feed/). 
+
