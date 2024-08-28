@@ -5,7 +5,7 @@ output:
     theme: united
 ---
 
-# Hey!
+<span style="font-size:20px; color:blue;"><b>Hey!</b></span>
 
 I am a data scientist interested in baseball. Currently, I am completing my final year of a BSc in statistics at [Dalhousie University](https://www.dal.ca/faculty/science/math-stats.html).
 
