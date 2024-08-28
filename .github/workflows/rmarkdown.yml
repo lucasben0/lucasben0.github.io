@@ -20,7 +20,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          install.packages(c('rmarkdown', 'knitr', 'yaml', 'tinytex'), repos = 'https://cloud.r-project.org/')
+          Rscript -e "install.packages(c('rmarkdown', 'knitr', 'yaml', 'tinytex'), repos = 'https://cloud.r-project.org/')"
 
       - name: Render R Markdown files
         run: |
