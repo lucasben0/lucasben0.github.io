@@ -2,7 +2,7 @@
 title: "School"
 output: 
   html_document:
-    theme: united
+    theme: paper
 ---
 <span style="font-size:28px"><b>Relevant Coursework</b></span>
 
