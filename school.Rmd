@@ -7,8 +7,9 @@ output: html_document
 Below are several assignments I completed for **STAT 3450 Statistical Learning With R**. This course explored the theory and application of common statistical methods used by data scientists. Topics covered include *classification*, *linear and non-linear models*, *unsupervised learning*, and *deep learning*. 
 
 <span style="font-size:20px"><b>Wine Classification Using Logistic Regression</b></span>
+<p>
 <a href="improved_wine.pdf" target="_blank">[Wine Classification Using Logistic Regression]</a>
-
+</p>
 
 
 
