@@ -12,7 +12,9 @@ Below are several assignments I completed for **STAT 3450 Statistical Learning W
   <span style="font-size:20px;"><b>Wine Classification Using Logistic Regression</b></span>
 </a>
 
-
+<a href="Comparison of Classification Methods for Celestial Objects.pdf" target="_blank">
+  <span style="font-size:20px;"><b>Comparison of Classification Methods for Celestial Objects</b></span>
+</a>
 
 
 
